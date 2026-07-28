@@ -42,19 +42,22 @@ st.markdown(
 st.title("✨ Something Special For You, Archana ✨")
 st.write("A digital surprise crafted with love and code.")
 
-# --- COUNTDOWN TIMER CONFIGURATION ---
-current_year = datetime.datetime.now().year
-# Sets the target to exactly 12:01 AM (00:01) on September 3rd
-target_date = datetime.datetime(current_year, 9, 3, 0, 1, 0)
-now = datetime.datetime.now()
+# --- COUNTDOWN TIMER CONFIGURATION (IST FIXED) ---
+# Fetch server UTC time and add 5 hours and 30 minutes to get local Indian Time (IST)
+now_utc = datetime.datetime.utcnow()
+now_ist = now_utc + datetime.timedelta(hours=5, minutes=30)
 
-if now > target_date:
+current_year = now_ist.year
+# Target Time: September 3rd at exactly 12:01 AM IST
+target_date = datetime.datetime(current_year, 9, 3, 0, 1, 0)
+
+if now_ist > target_date:
     target_date = datetime.datetime(current_year + 1, 9, 3, 0, 1, 0)
 
-time_difference = target_date - now
+time_difference = target_date - now_ist
 
-# REAL TIME LOCK CHECK: Automatically triggers True when now reaches or passes target date
-is_birthday = now >= target_date
+# Automatic lock check using Indian Standard Time
+is_birthday = now_ist >= target_date
 
 # --- DISPLAY LOGIC ---
 if not is_birthday:
@@ -69,7 +72,6 @@ if not is_birthday:
         "The surprise unlocks automatically on your special day! Stay tuned. 😉"
     )
 
-    # Keeps the timer ticking down live dynamically every second
     time.sleep(1)
     st.rerun()
 
