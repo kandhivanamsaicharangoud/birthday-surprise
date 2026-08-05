@@ -79,13 +79,17 @@ else:
     st.balloons()
     st.success("🎉 HAPPY BIRTHDAY, ARCHANA! 🎉")
 
-    # --- BACKGROUND MUSIC (ONLY RUNS ON THE BIRTHDAY PAGE) ---
-    try:
-        with open("birthday.mp3.mp3", "rb") as audio_file:
-            audio_bytes = audio_file.read()
-        st.audio(audio_bytes, format="audio/mp3", loop=True, autoplay=True)
-    except Exception:
-        st.error("Could not find the music file 'birthday.mp3.mp3' in your repository.")
+    # --- BACKGROUND MUSIC WITH TOGGLE ---
+    st.subheader("🎵 Background Music")
+    play_music = st.toggle("Play Birthday Music 🎶", value=True)
+
+    if play_music:
+        try:
+            with open("birthday.mp3.mp3", "rb") as audio_file:
+                audio_bytes = audio_file.read()
+            st.audio(audio_bytes, format="audio/mp3", loop=True, autoplay=True)
+        except Exception:
+            st.error("Could not find the music file 'birthday.mp3.mp3' in your repository.")
 
     # 1. Main Photo Section
     st.subheader("📸 A Special Moment")
