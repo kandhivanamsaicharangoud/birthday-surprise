@@ -38,13 +38,22 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# --- BACKGROUND MUSIC ---
+# This loads your uploaded music file and sets it to loop and autoplay
+try:
+    with open("birthday.mp3.mp3", "rb") as audio_file:
+        audio_bytes = audio_file.read()
+    st.audio(audio_bytes, format="audio/mp3", loop=True, autoplay=True)
+except Exception:
+    st.error("Could not find the music file 'birthday.mp3.mp3' in your repository.")
+
 # --- TITLE AREA ---
 st.title("✨ Something Special For You, Archana ✨")
 st.write("A digital surprise crafted with love and code.")
 
 # --- COUNTDOWN TIMER CONFIGURATION (IST FIXED) ---
-# Fetch server UTC time and add 5 hours and 30 minutes to get local Indian Time (IST)
-now_utc = datetime.datetime.utcnow()
+# Fetch server UTC time safely and add 5 hours and 30 minutes for IST
+now_utc = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
 now_ist = now_utc + datetime.timedelta(hours=5, minutes=30)
 
 current_year = now_ist.year
