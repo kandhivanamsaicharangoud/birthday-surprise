@@ -56,7 +56,7 @@ if now_ist > target_date:
 time_difference = target_date - now_ist
 
 # Automatic lock check using Indian Standard Time
-is_birthday = now_ist >= target_date
+is_birthday = True
 
 # --- DISPLAY LOGIC ---
 if not is_birthday:
