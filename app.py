@@ -55,7 +55,7 @@ if now_ist > target_date:
 
 time_difference = target_date - now_ist
 
-# Automatic lock check using Indian Standard Time
+# TESTING MODE: Set to True to see the final birthday page directly right now!
 is_birthday = True
 
 # --- DISPLAY LOGIC ---
@@ -75,21 +75,9 @@ if not is_birthday:
     st.rerun()
 
 else:
-    # Everything inside this section will only unlock on September 3rd
+    # This is what will show on September 3rd when the countdown finishes
     st.balloons()
     st.success("🎉 HAPPY BIRTHDAY, ARCHANA! 🎉")
-
-    # --- BACKGROUND MUSIC WITH TOGGLE ---
-    st.subheader("🎵 Background Music")
-    play_music = st.toggle("Play Birthday Music 🎶", value=True)
-
-    if play_music:
-        try:
-            with open("birthday.mp3.mp3", "rb") as audio_file:
-                audio_bytes = audio_file.read()
-            st.audio(audio_bytes, format="audio/mp3", loop=True, autoplay=True)
-        except Exception:
-            st.error("Could not find the music file 'birthday.mp3.mp3' in your repository.")
 
     # 1. Main Photo Section
     st.subheader("📸 A Special Moment")
@@ -101,7 +89,7 @@ else:
         )
     except Exception:
         st.error(
-            "Could not find 'archana.png'. Please make sure it is in your open folder directory!"
+            "Could not find 'archana.png'. Please make sure it is in your repository directory!"
         )
 
     # 2. Interactive Note Generator
