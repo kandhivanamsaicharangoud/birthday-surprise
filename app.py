@@ -38,21 +38,11 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# --- BACKGROUND MUSIC ---
-# This loads your uploaded music file and sets it to loop and autoplay
-try:
-    with open("birthday.mp3.mp3", "rb") as audio_file:
-        audio_bytes = audio_file.read()
-    st.audio(audio_bytes, format="audio/mp3", loop=True, autoplay=True)
-except Exception:
-    st.error("Could not find the music file 'birthday.mp3.mp3' in your repository.")
-
 # --- TITLE AREA ---
 st.title("✨ Something Special For You, Archana ✨")
 st.write("A digital surprise crafted with love and code.")
 
 # --- COUNTDOWN TIMER CONFIGURATION (IST FIXED) ---
-# Fetch server UTC time safely and add 5 hours and 30 minutes for IST
 now_utc = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
 now_ist = now_utc + datetime.timedelta(hours=5, minutes=30)
 
@@ -85,10 +75,19 @@ if not is_birthday:
     st.rerun()
 
 else:
+    # Everything inside this section will only unlock on September 3rd
     st.balloons()
     st.success("🎉 HAPPY BIRTHDAY, ARCHANA! 🎉")
 
-    # 1. Main Photo Section (Locked to size 150)
+    # --- BACKGROUND MUSIC (ONLY RUNS ON THE BIRTHDAY PAGE) ---
+    try:
+        with open("birthday.mp3.mp3", "rb") as audio_file:
+            audio_bytes = audio_file.read()
+        st.audio(audio_bytes, format="audio/mp3", loop=True, autoplay=True)
+    except Exception:
+        st.error("Could not find the music file 'birthday.mp3.mp3' in your repository.")
+
+    # 1. Main Photo Section
     st.subheader("📸 A Special Moment")
     try:
         st.image(
