@@ -98,8 +98,7 @@ else:
         import random
 
         compliments = [
-           "Wishing you a year filled with achievements and boundless joy!", 
-           "Ninnu college first roju chusinappude nee midha ishtam perigindhi... ✨❤️", 
+           "Wishing you a year filled with achievements and boundless joy!",  
         ]
         st.write(f"### 💌 *\"{random.choice(compliments)}\"*")
 
