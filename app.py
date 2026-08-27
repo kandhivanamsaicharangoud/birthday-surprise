@@ -66,6 +66,11 @@ if not is_birthday:
     while now_ist < target_date:
         loop_utc = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
         loop_ist = loop_utc + datetime.timedelta(hours=5, minutes=30)
+        
+        # Break loop if target date is reached
+        if loop_ist >= target_date:
+            break
+            
         live_difference = target_date - loop_ist
         
         # Calculate exact live segments
@@ -81,27 +86,27 @@ if not is_birthday:
             col3.metric("Minutes Left", minutes)
             col4.metric("Seconds Left", seconds)
             st.info("The surprise unlocks automatically on your special day! Stay tuned. 😉")
-        
+            
         time.sleep(1)
-        
-        # Automatically refresh and unlock when time is up
-        if loop_ist >= target_date:
-            st.rerun()
+    
+    # Force a rerun once the loop breaks so it moves to the birthday layout
+    st.rerun()
+
 else:
-    # Ee content pure ga kevalam September 3rd target daataka matrame unlock avuthundi
+    # This content unlocks only after the target date
     if 'balloons_played' not in st.session_state:
         st.balloons()
         st.session_state['balloons_played'] = True
         
     st.success("🎉 HAPPY BIRTHDAY, ARCHANA! 🎉")
-    
+
     # 1. Main Photo Section
     st.subheader("📸 A Special Moment")
     try:
         st.image("archana.png", caption="Keep shining bright!", width=300)
     except Exception:
         st.error("Could not find 'archana.png'. Please make sure it is in your repository directory!")
-        
+
     # 2. Interactive Note Generator
     st.subheader("💡 Click Below For A Secret Note...")
     if st.button("Click Here 👑"):
@@ -112,7 +117,7 @@ else:
             "Hope this special day brings you endless reasons to be happy!"
         ]
         st.write(f"### 💌 *\"{random.choice(compliments)}\"*")
-        
+
     # 3. Personalized Letter Section
     st.subheader("✉️ A Note For You")
     with st.expander("Click to open the message from Sai Charan"):
