@@ -45,16 +45,16 @@ st.markdown(
 st.title("✨ Something Special For You, Archana ✨")
 st.write("A digital surprise crafted with love and code.")
 
-# --- PRODUCTION MODE (STRICT LOCK) ---
-# Testing complete ayindi కాబట్టి దీన్ని పూర్తిగా తీసేసి, కేవలం డేట్ బట్టే లాక్ చేసాం.
-# Target Time: September 3rd, 2026 at exactly 12:01 AM IST
+# --- HARD TARGET DATE (SEPTEMBER 3, 2026 12:01 AM IST) ---
 target_date = datetime.datetime(2026, 9, 3, 0, 1, 0)
 
-# Live Time Check (IST Conversion)
-loop_utc = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
-loop_ist = loop_utc + datetime.timedelta(hours=5, minutes=30)
+# Fetch exact Live Current IST time
+now_utc = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
+now_ist = now_utc + datetime.timedelta(hours=5, minutes=30)
 
-is_birthday = loop_ist >= target_date
+# STRICT LOCK CONDITION
+# Ippudu absolute logic condition verify chestundi. True unte matrame surprise open avthundi.
+is_birthday = now_ist >= target_date
 
 # --- DISPLAY LOGIC ---
 if not is_birthday:
@@ -62,9 +62,13 @@ if not is_birthday:
     
     # Live updating countdown container
     countdown_placeholder = st.empty()
+    
+    # Refresh loops current clock data directly inside structural parameters
+    loop_utc = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
+    loop_ist = loop_utc + datetime.timedelta(hours=5, minutes=30)
     live_difference = target_date - loop_ist
     
-    # Calculate components
+    # Calculate exact live segments
     days = live_difference.days
     hours = live_difference.seconds // 3600
     minutes = (live_difference.seconds % 3600) // 60
@@ -79,12 +83,12 @@ if not is_birthday:
         
     st.info("The surprise unlocks automatically on your special day! Stay tuned. 😉")
     
-    # Safe sleep and refresh
+    # Trigger refresh cycle
     time.sleep(1)
     st.rerun()
 
 else:
-    # This is what will show on September 3rd when the countdown finishes
+    # Ee content pure ga kevalam September 3rd target daataka matrame unlock avuthundi
     if 'balloons_played' not in st.session_state:
         st.balloons()
         st.session_state['balloons_played'] = True
