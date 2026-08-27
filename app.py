@@ -1,10 +1,13 @@
 import datetime
 import time
 import streamlit as st
+import random
 
 # --- PAGE CONFIGURATION ---
 st.set_page_config(
-    page_title="Happy Birthday Archana! ✨", page_icon="🌸", layout="centered"
+    page_title="Happy Birthday Archana! ✨",
+    page_icon="🌸",
+    layout="centered"
 )
 
 # --- CUSTOM THEME STYLING ---
@@ -34,7 +37,7 @@ st.markdown(
         box-shadow: 0px 6px 15px rgba(255, 20, 147, 0.4);
     }
     </style>
-""",
+    """,
     unsafe_allow_html=True,
 )
 
@@ -42,63 +45,76 @@ st.markdown(
 st.title("✨ Something Special For You, Archana ✨")
 st.write("A digital surprise crafted with love and code.")
 
+# --- TESTING MODE ---
+# Archana ki chupinchaka munde meeku website ela vuntundho chudalali ante true pettukondi.
+# Live lo production ki pampinchepudu deenini FALSE cheyandi.
+TESTING_MODE = False  
+
 # --- COUNTDOWN TIMER CONFIGURATION (IST FIXED) ---
 now_utc = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
 now_ist = now_utc + datetime.timedelta(hours=5, minutes=30)
-
 current_year = now_ist.year
+
 # Target Time: September 3rd at exactly 12:01 AM IST
 target_date = datetime.datetime(current_year, 9, 3, 0, 1, 0)
 
+# If September 3rd of this year has already passed, target next year
 if now_ist > target_date:
     target_date = datetime.datetime(current_year + 1, 9, 3, 0, 1, 0)
 
 time_difference = target_date - now_ist
-
-# TESTING MODE: Set to True to see the final birthday page directly right now!
-is_birthday = now_ist >= target_date
+is_birthday = now_ist >= target_date or TESTING_MODE
 
 # --- DISPLAY LOGIC ---
 if not is_birthday:
     st.subheader("Counting down the days until September 3rd...")
-
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Days Left", time_difference.days)
-    col2.metric("Hours Left", time_difference.seconds // 3600)
-    col3.metric("Minutes Left", (time_difference.seconds % 3600) // 60)
-
-    st.info(
-        "The surprise unlocks automatically on your special day! Stay tuned. 😉"
-    )
-
+    
+    # Live updating countdown container
+    countdown_placeholder = st.empty()
+    
+    # Calculate components
+    days = time_difference.days
+    hours = time_difference.seconds // 3600
+    minutes = (time_difference.seconds % 3600) // 60
+    seconds = (time_difference.seconds % 60)
+    
+    with countdown_placeholder.container():
+        col1, col2, col3, col4 = st.columns(4)
+        col1.metric("Days Left", days)
+        col2.metric("Hours Left", hours)
+        col3.metric("Minutes Left", minutes)
+        col4.metric("Seconds Left", seconds) # Added seconds for dynamic feel
+        
+    st.info("The surprise unlocks automatically on your special day! Stay tuned. 😉")
+    
+    # Safe sleep and refresh
     time.sleep(1)
     st.rerun()
 
 else:
     # This is what will show on September 3rd when the countdown finishes
-    st.balloons()
+    if 'balloons_played' not in st.session_state:
+        st.balloons()
+        st.session_state['balloons_played'] = True
+        
     st.success("🎉 HAPPY BIRTHDAY, ARCHANA! 🎉")
 
     # 1. Main Photo Section
     st.subheader("📸 A Special Moment")
     try:
-        st.image(
-            "archana.png",
-            caption="Keep shining bright!",
-            width=150
-        )
+        # Width standard ga vundadaniki 300 preferred format screen sizes ki.
+        st.image("archana.png", caption="Keep shining bright!", width=300) 
     except Exception:
-        st.error(
-            "Could not find 'archana.png'. Please make sure it is in your repository directory!"
-        )
+        st.error("Could not find 'archana.png'. Please make sure it is in your repository directory!")
 
     # 2. Interactive Note Generator
     st.subheader("💡 Click Below For A Secret Note...")
     if st.button("Click Here 👑"):
-        import random
-
         compliments = [
-           "Wishing you a year filled with achievements and boundless joy!",  
+            "Wishing you a year filled with achievements and boundless joy!",
+            "May your smile always stay this bright and beautiful!",
+            "Here's to a fantastic year ahead full of success!",
+            "Hope this special day brings you endless reasons to be happy!"
         ]
         st.write(f"### 💌 *\"{random.choice(compliments)}\"*")
 
@@ -106,10 +122,10 @@ else:
     st.subheader("✉️ A Note For You")
     with st.expander("Click to open the message from Sai Charan"):
         st.write("""
-        Hey Archana,
+        Hey Archana, 
         
-        Naku konchem unique ga wishes chepdham anipinchindhi. Thvaralo manam college lo kuda 
-        matladukuntam ani anukuntunna.❤️✨
+        Naku konchem unique ga wishes chepdham anipinchindhi. 
+        Thvaralo manam college lo kuda matladukuntam ani anukuntunna. ❤️✨
         
         Have the most beautiful birthday ever!
         
