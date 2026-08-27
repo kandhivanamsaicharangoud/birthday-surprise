@@ -38,17 +38,17 @@ st.markdown(
     }
     </style>
     """,
-    unsafe_allow_html= False,
+    unsafe_allow_html=True,
 )
 
 # --- TITLE AREA ---
 st.title("✨ Something Special For You, Archana ✨")
 st.write("A digital surprise crafted with love and code.")
 
-# --- TESTING MODE ---
-# TRUE pedithe ippude birthday surprise page open ayipothundi (Testing kosam).
-# Archana ki link pampinche mundu deenini FALSE cheyadam marchipovaddu!
-TESTING_MODE = True  
+# --- LIVE PRODUCTION MODE ---
+# TESTING_MODE ni FALSE chesam. Kabatti ippudu direct countdown mathrame kanipisthundi.
+# September 3rd midnight 12:01 AM IST ki gift automatic ga open avuthundi!
+TESTING_MODE = False  
 
 # --- COUNTDOWN TIMER CONFIGURATION (IST FIXED) ---
 now_utc = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
@@ -62,7 +62,6 @@ target_date = datetime.datetime(current_year, 9, 3, 0, 1, 0)
 if now_ist > target_date:
     target_date = datetime.datetime(current_year + 1, 9, 3, 0, 1, 0)
 
-# Re-calculating time inside display logic to avoid freezing
 is_birthday = now_ist >= target_date or TESTING_MODE
 
 # --- DISPLAY LOGIC ---
