@@ -53,7 +53,6 @@ now_utc = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
 now_ist = now_utc + datetime.timedelta(hours=5, minutes=30)
 
 # STRICT LOCK CONDITION
-# Ippudu absolute logic condition verify chestundi. True unte matrame surprise open avthundi.
 is_birthday = now_ist >= target_date
 
 # --- DISPLAY LOGIC ---
@@ -63,30 +62,31 @@ if not is_birthday:
     # Live updating countdown container
     countdown_placeholder = st.empty()
     
-    # Refresh loops current clock data directly inside structural parameters
-    loop_utc = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
-    loop_ist = loop_utc + datetime.timedelta(hours=5, minutes=30)
-    live_difference = target_date - loop_ist
-    
-    # Calculate exact live segments
-    days = live_difference.days
-    hours = live_difference.seconds // 3600
-    minutes = (live_difference.seconds % 3600) // 60
-    seconds = (live_difference.seconds % 60)
-    
-    with countdown_placeholder.container():
-        col1, col2, col3, col4 = st.columns(4)
-        col1.metric("Days Left", days)
-        col2.metric("Hours Left", hours)
-        col3.metric("Minutes Left", minutes)
-        col4.metric("Seconds Left", seconds)
+    # Continuous live updating countdown loop
+    while now_ist < target_date:
+        loop_utc = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
+        loop_ist = loop_utc + datetime.timedelta(hours=5, minutes=30)
+        live_difference = target_date - loop_ist
         
-    st.info("The surprise unlocks automatically on your special day! Stay tuned. 😉")
-    
-    # Trigger refresh cycle
-    time.sleep(1)
-    st.rerun()
-
+        # Calculate exact live segments
+        days = live_difference.days
+        hours = live_difference.seconds // 3600
+        minutes = (live_difference.seconds % 3600) // 60
+        seconds = (live_difference.seconds % 60)
+        
+        with countdown_placeholder.container():
+            col1, col2, col3, col4 = st.columns(4)
+            col1.metric("Days Left", days)
+            col2.metric("Hours Left", hours)
+            col3.metric("Minutes Left", minutes)
+            col4.metric("Seconds Left", seconds)
+            st.info("The surprise unlocks automatically on your special day! Stay tuned. 😉")
+        
+        time.sleep(1)
+        
+        # Automatically refresh and unlock when time is up
+        if loop_ist >= target_date:
+            st.rerun()
 else:
     # Ee content pure ga kevalam September 3rd target daataka matrame unlock avuthundi
     if 'balloons_played' not in st.session_state:
@@ -94,14 +94,14 @@ else:
         st.session_state['balloons_played'] = True
         
     st.success("🎉 HAPPY BIRTHDAY, ARCHANA! 🎉")
-
+    
     # 1. Main Photo Section
     st.subheader("📸 A Special Moment")
     try:
-        st.image("archana.png", caption="Keep shining bright!", width=300) 
+        st.image("archana.png", caption="Keep shining bright!", width=300)
     except Exception:
         st.error("Could not find 'archana.png'. Please make sure it is in your repository directory!")
-
+        
     # 2. Interactive Note Generator
     st.subheader("💡 Click Below For A Secret Note...")
     if st.button("Click Here 👑"):
@@ -112,15 +112,14 @@ else:
             "Hope this special day brings you endless reasons to be happy!"
         ]
         st.write(f"### 💌 *\"{random.choice(compliments)}\"*")
-
+        
     # 3. Personalized Letter Section
     st.subheader("✉️ A Note For You")
     with st.expander("Click to open the message from Sai Charan"):
         st.write("""
-        Hey Archana, 
+        Hey Archana,
         
-        Naku konchem unique ga wishes chepdham anipinchindhi. 
-        Thvaralo manam college lo kuda matladukuntam ani anukuntunna. ❤️✨
+        Naku konchem unique ga wishes chepdham anipinchindhi. Thvaralo manam college lo kuda matladukuntam ani anukuntunna. ❤️✨
         
         Have the most beautiful birthday ever!
         
