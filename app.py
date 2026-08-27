@@ -46,9 +46,9 @@ st.title("✨ Something Special For You, Archana ✨")
 st.write("A digital surprise crafted with love and code.")
 
 # --- TESTING MODE ---
-# Archana ki chupinchaka munde meeku website ela vuntundho chudalali ante true pettukondi.
-# Live lo production ki pampinchepudu deenini FALSE cheyandi.
-TESTING_MODE = False  
+# TRUE pedithe ippude birthday surprise page open ayipothundi (Testing kosam).
+# Archana ki link pampinche mundu deenini FALSE cheyadam marchipovaddu!
+TESTING_MODE = True  
 
 # --- COUNTDOWN TIMER CONFIGURATION (IST FIXED) ---
 now_utc = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
@@ -62,7 +62,7 @@ target_date = datetime.datetime(current_year, 9, 3, 0, 1, 0)
 if now_ist > target_date:
     target_date = datetime.datetime(current_year + 1, 9, 3, 0, 1, 0)
 
-time_difference = target_date - now_ist
+# Re-calculating time inside display logic to avoid freezing
 is_birthday = now_ist >= target_date or TESTING_MODE
 
 # --- DISPLAY LOGIC ---
@@ -72,18 +72,23 @@ if not is_birthday:
     # Live updating countdown container
     countdown_placeholder = st.empty()
     
+    # Accurate current time fetch inside loop
+    loop_utc = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
+    loop_ist = loop_utc + datetime.timedelta(hours=5, minutes=30)
+    live_difference = target_date - loop_ist
+    
     # Calculate components
-    days = time_difference.days
-    hours = time_difference.seconds // 3600
-    minutes = (time_difference.seconds % 3600) // 60
-    seconds = (time_difference.seconds % 60)
+    days = live_difference.days
+    hours = live_difference.seconds // 3600
+    minutes = (live_difference.seconds % 3600) // 60
+    seconds = (live_difference.seconds % 60)
     
     with countdown_placeholder.container():
         col1, col2, col3, col4 = st.columns(4)
         col1.metric("Days Left", days)
         col2.metric("Hours Left", hours)
         col3.metric("Minutes Left", minutes)
-        col4.metric("Seconds Left", seconds) # Added seconds for dynamic feel
+        col4.metric("Seconds Left", seconds)
         
     st.info("The surprise unlocks automatically on your special day! Stay tuned. 😉")
     
@@ -102,7 +107,6 @@ else:
     # 1. Main Photo Section
     st.subheader("📸 A Special Moment")
     try:
-        # Width standard ga vundadaniki 300 preferred format screen sizes ki.
         st.image("archana.png", caption="Keep shining bright!", width=300) 
     except Exception:
         st.error("Could not find 'archana.png'. Please make sure it is in your repository directory!")
